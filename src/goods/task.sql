@@ -138,3 +138,8 @@ HAVING Count(*) >= 2
 SELECT g.is_fragile, count(*)
 FROM   goods g
 GROUP  BY g.is_fragile
+
+
+--В таблице есть столбец с именем, некоторые буквы в верхнем и нижнем регистрах.
+--Изменить имена так, чтобы первая буква была в верхнем регистре, а остальные в нижнем.
+select initcap(name) from goods
