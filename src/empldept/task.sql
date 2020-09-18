@@ -30,10 +30,13 @@ insert into Empl (FirstName, LastName, DeptId) values('Danylo', 'Danylov', 2);
 insert into Empl (FirstName, LastName, DeptId) values('Nadia', 'Nadivko', 4);
 insert into Empl (FirstName, LastName, DeptId) values('Oleg', 'Oleghkiv', 4);
 insert into Empl (FirstName, LastName, DeptId) values('Maria', 'Mariyva', 4);
+insert into Empl (FirstName, LastName, DeptId) values('Maria', 'Mariyva', 4);
 insert into Empl (FirstName, LastName, DeptId) values('Larysa', 'Lasysko', 5);
 insert into Empl (FirstName, LastName, DeptId) values('Tymifiy', 'Oleghkiv', 5);
 insert into Empl (FirstName, LastName, DeptId) values('Kate', 'Katev', 1);
 insert into Empl (FirstName, LastName) values('Nadia', 'Nadiyv');
+insert into Empl (FirstName, LastName, DeptId) values('Danylo', 'Kryh', 5);
+insert into Empl (FirstName, LastName, DeptId) values('Danylo', 'Kuhar', 1);
 
 --выведите список городов, где находятся подразделения компании
 select city from dept
@@ -87,3 +90,30 @@ WHERE  lastname IN (SELECT lastname
 ORDER  BY lastname
 
 --выберите список людей, имеющих несоклько полных совпадений имени и фамилий из города "Dnipro" и упорядочить по именам
+SELECT DISTINCT e.firstname,
+                e.lastname
+FROM   empl e
+       JOIN (SELECT firstname,
+                    lastname
+             FROM   empl
+             GROUP  BY firstname,
+                       lastname
+             HAVING Count(*) > 1) emlp_more
+         ON emlp_more.firstname = e.firstname
+            AND emlp_more.lastname = e.lastname
+WHERE  deptid = 4
+ORDER  BY e.firstname,
+          e.lastname
+
+--получите список городов с количеством работников с именем "Danylo" более 2. Упорядочить по номеру
+SELECT d.city
+FROM   empl e
+       JOIN (SELECT firstname
+             FROM   empl
+             GROUP  BY firstname
+             HAVING Count(*) > 2) emlp_more
+         ON emlp_more.firstname = e.firstname
+       JOIN dept d
+         ON d.id = e.deptid
+WHERE  e.firstname = 'Danylo'
+ORDER  BY d.id
